@@ -1,8 +1,9 @@
 const {Router} =require('express');
 const userRouter= Router();
+const mongoose=require('mongoose');
 const {User}=require('../models/User')
 
-userRouter.get('/',async (req,res) => {
+userRouter.get('/', async (req,res) => {
     // res.send({users: users})
     try{
         const users= await User.find({});
@@ -13,8 +14,6 @@ userRouter.get('/',async (req,res) => {
     }
 })
 userRouter.get('/:userId',async(req,res)=>{
-    // console.log(req.params)
-    
     try{
         const {userId}=req.params;
         if(!mongoose.isValidObjectId(userId)) return res.status(400).send({err:"invalid useriId"})
@@ -65,12 +64,24 @@ userRouter.put('/:userId',async (req,res)=>{
         if(age && typeof age !== 'number') return res.status(400).send({err: "age must be a number"})
         if( name && typeof name.first !== 'string' && typeof name.last !== 'string') return res.status(400).send ({err:"first and last name are string "})
         
-        let updateBody={};
-        if (age) updateBody.age=age;
-        if(name) updateBody.name=name;
+        // let updateBody={};
+        // if (age) updateBody.age=age;
+        // if(name) updateBody.name=name;
 
-        //mongoose를 통해 좀더 깔끔하게 업데이트 되는 메소드
-        const user= await User.findByIdAndUpdate(userId,updateBody, {new:true}); //new:true 를 추가하지않으면 업뎃전의 값만 출력으로나옴
+        // mongoose를 통해 좀더 깔끔하게 업데이트 되는 메소드
+        // const user= await User.findByIdAndUpdate(userId,updateBody, {new:true}); >> new:true 를 추가하지않으면 업뎃전의 값만 출력으로나옴
+       
+        let user= await User.findById(userId);
+        //mongoose 에서 바뀌기전 체크
+        console.log({userBeforeEdit: user})
+        if(age) user.age=age;
+        if(name) user.name= name;
+        await user.save();
+        console.log({iserAfterEdit: user})
+         //mongoose 에서 바뀐후 체크
+        console.log({userAftereEdit: user})
+        await user.save();
+
         return res.send({user})
 
     }catch(err){

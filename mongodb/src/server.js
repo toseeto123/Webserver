@@ -1,6 +1,7 @@
 const express=require('express')
 const app=express();
 const {userRouter}=require('./routes/userRoute')
+const {blougRouter, blogRouter} = require('./routes/blogRoute');
 const mongoose=require('mongoose')
 
 
@@ -19,7 +20,8 @@ const server= async()=>{
         // console.log({mongodbConnection}) << 서버연결 확인용 log찍기
         app.use(express.json())
 
-        app.use('/user',userRouter)
+        app.use('/user',userRouter);
+        app.use('/blog',blogRouter);
 
         app.listen(3000, () => console.log('server listening on port 3000'))
     }catch(err){

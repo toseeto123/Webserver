@@ -1,14 +1,14 @@
 {
   "name": "mongodb",
   "version": "1.0.0",
-  "description": "",
+  "description": "mongodb tutorial",
   "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js"
   },
-  "author": "",
+  "author": "namsu Kim",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
